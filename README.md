@@ -106,7 +106,8 @@ without worrying about any traffic being routed to the service.
 If you choose this route the frontend web app might still route traffic to the
 `blue` service even though it is not running anymore because it has not gotten
 updated service information from Eureka.  This problem can be mitigated by enabling
-Spring Retry in the frontend webapp so it retries any failed requests to the
+[Spring Retry](http://cloud.spring.io/spring-cloud-static/Dalston.SR2/#retrying-failed-requests)
+in the frontend webapp so it retries any failed requests to the
 Blue Green Service.
 
 Lets take the more conservative approach and change the status of the `blue`

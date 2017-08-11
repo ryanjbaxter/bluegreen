@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableZuulProxy
 @RestController
 public class BlueOrGreenFrontendApplication {
 
