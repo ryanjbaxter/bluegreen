@@ -20,15 +20,14 @@ get an Eureka server running is to use the
 `spring cloud eureka`.
 
 Then run the the Blue Green Service app.  You are going to want to run
-two instances of the app, one run with the `green` profile and one run with the
-`blue` profile.
+two instances of the app.
 
 Create an executable jar we can run by running
 ```
 cd blueorgreenservice && ./mvnw clean package && cd ../
 ```
 
-First lets run the service with the `blue` profile.
+First lets run an instance of the Blue Green Service with the `blue` profile activated.
 ```
 java -jar blueorgreenservice/target/blueorgreen-0.0.1-SNAPSHOT.jar --spring.profiles.active=blue
 ```
@@ -37,9 +36,9 @@ Once the app is up and running you should see the service registered with Eureka
 however the status of the service will be `OUT_OF_SERVICE`.  This is to
 demonstrate that when you initially bring up a service you probably want
 it to be `OUT_OF_SERVICE` until you determine that it is working properly and want
-traffic routed to the service.  Lets assume the service is working properly
-and set the status to `UP` so traffic can be routed to it.  To do this we can
-use the `/service-registry` endpoint.
+traffic routed to the service.  For the sake of this demonstration, lets assume
+the service is working properly and set the status to `UP` so traffic can be
+routed to it.  To do this we can use the `/service-registry` endpoint.
 
 ```
 curl -X "POST" "http://localhost:8181/service-registry/instance-status" \
@@ -47,7 +46,7 @@ curl -X "POST" "http://localhost:8181/service-registry/instance-status" \
    -d "UP"
 ```
 
-After that `POST` request you can check Eureka again and the status should
+Once you make the `POST` request you can check Eureka again and the status should
 now be `UP`.
 
 Now lets bring the frontend app up.  First build an executable jar.
@@ -74,8 +73,8 @@ java -jar blueorgreenservice/target/blueorgreen-0.0.1-SNAPSHOT.jar --spring.prof
 Once the app is up and running you can go to Eureka and see there are now two
 instances of the bluegreen service running but one has the status `UP` and the
 other with the status of `OUT_OF_SERVICE`.  Since the green version of the Blue
-Green Service currently has the status `OUT_OF_SERVICE` the webapp won't make any
-requests to the service.  Again this gives us the opportunity to make sure the green
+Green Service currently has the status `OUT_OF_SERVICE` the frontend web app won't make any
+requests to that instance.  Again this gives us the opportunity to make sure the green
 version of the Blue Green Service is running correctly before we change its status
 to `UP` and allowing traffic to be sent to it.  Lets assume its running fine and
 change its status.
@@ -87,7 +86,7 @@ curl -X "POST" "http://localhost:8080/service-registry/instance-status" \
 ```
 
 Now in Eureka we should see that both instances of the Blue Green Service have the
-status `UP`.  However the frontend app won't wrote any traffic to the service until
+status `UP`.  However the frontend web app won't route any traffic to the service until
 it refreshes the service data from Eureka.  This may take a couple minutes to occur.
 Once the frontend app refreshes it's service data from Eureka, you can refresh the
 web app and see that sometimes you will see `BLUE` returned and sometimes you will
@@ -98,12 +97,12 @@ Once you are satisfied the the `green` version of the Blue Green Service is runn
 you will want to bring down the `blue` version.  This can be done in two ways.
 
 1.  You can change the status of the `blue` service to `OUT_OF_SERVICE` and wait
-for the status to propagate to the frontend web app so that only traffic will be
+for the status to propagate to the frontend web app so that only traffic will only be
 routed to the `green` service.  Once that happens you can shut down the `blue` service
 without worrying about any traffic being routed to the service.
 
 2.  You can just shut down the `blue` service without first changing the status.
-If you choose this route the frontend web app might still route traffic to the
+If you choose this option the frontend web app might still route traffic to the
 `blue` service even though it is not running anymore because it has not gotten
 updated service information from Eureka.  This problem can be mitigated by enabling
 [Spring Retry](http://cloud.spring.io/spring-cloud-static/Dalston.SR2/#retrying-failed-requests)
