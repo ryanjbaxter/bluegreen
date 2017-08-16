@@ -10,7 +10,6 @@ applications:
     SPRING_PROFILES_ACTIVE: blue
   hosts:
     - blueservice
-    - blueorgreenservice
 - name: greenservice
   memory: 1024M
   path: target/blueorgreen-0.0.1-SNAPSHOT.jar
@@ -21,4 +20,3 @@ applications:
     SPRING_PROFILES_ACTIVE: green
   hosts:
   - greenservice
-  - blueorgreenservice
