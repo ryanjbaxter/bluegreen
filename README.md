@@ -253,3 +253,52 @@ curl -X "POST" "https://blueservice.mycf.com/service-registry/instance-status" \
 This status change may take a few minutes to propagate to the front end web app.
 Once this happens the web app will only display `GREEN`.  At this point
 it is safe to shut down or delete the `blue` service.
+
+### A Note About Scaling Apps In Cloud Foundry
+
+One of the benefits of running applications in CF is the ease at which you can
+scale apps up and down.  If you try to scale the Blue Green Service app up in
+Cloud Foundry you will notice that each instance that is created will register
+with the service discovery registry service with a status of `OUT_OF_SERVICE`.
+
+When there is more than one instance of the service running using the
+`/service-registry/instance-status` HTTP endpoint will prove problematic.  This
+is because the CF router will route requests to each instance in a round robin
+fashion so you can't just target the instances that are currently `OUT_OF_SERVICE`.
+
+To just target the instances that are currently `OUT_OF_SERVICE` you can use
+a special HTTP header containing the app GUID and the instance id.  To figure
+out what the app GUID is, run the following command
+
+```
+$ cf app blueservice --guid
+e4f55207-7b1a-4b2a-8344-c913edf4a827
+```
+
+To find the instance id, which just a 0 based index, run
+
+```
+$ cf app blueservice
+```
+
+This should result in something the looks like this
+
+```
+     state     since                    cpu    memory         disk           details
+#0   running   2017-08-16 03:01:23 PM   0.1%   414.8M of 1G   165.4M of 1G
+#1   running   2017-08-16 04:17:08 PM   0.5%   401.1M of 1G   163.9M of 1G
+#2   running   2017-08-16 04:17:12 PM   0.5%   408M of 1G     163.9M of 1G
+```
+
+The numbers, `#0`, `#1`, `#2`, are the instance ids.  To make a request specifically
+to instance `#1` you will make a request like this
+
+```
+curl -X "POST" "https://blueservice.mycf.com/service-registry/instance-status" \
+     -H "X-CF-APP-INSTANCE: e4f55207-7b1a-4b2a-8344-c913edf4a827:1" \
+     -H "Content-Type: text/plain; charset=utf-8" \
+     -d "UP"
+```
+
+The `X-CF-APP-INSTANCE` header is what tells the CF router which instance to target.
+The value should take the format of `APP_GUID:INSTANCE_ID`.
