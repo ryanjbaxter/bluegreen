@@ -301,4 +301,6 @@ curl -X "POST" "https://blueservice.mycf.com/service-registry/instance-status" \
 ```
 
 The `X-CF-APP-INSTANCE` header is what tells the CF router which instance to target.
-The value should take the format of `APP_GUID:INSTANCE_ID`.
+The value should take the format of `APP_GUID:INSTANCE_ID`.  You can find more
+information about how this works in the
+[Cloud Foundry documentation](https://docs.cloudfoundry.org/concepts/http-routing.html).
