@@ -1,7 +1,7 @@
 version: 2.0
 
 jobs:
-  "ruby-2.2":
+  "blueorgreenservice":
     docker:
       - image: circleci/openjdk:8-jdk
     working_directory: ~/blueorgreenservice
@@ -9,18 +9,13 @@ jobs:
       - checkout
       - run: cd blueorgreenservice && ./mvnw clean package
 
-  "ruby-2.3":
+  "blueorgreenfrontend":
     docker:
-      - image: circleci/ruby:2.3-node
-      - image: circleci/postgres:9.4.12-alpine
-    working_directory: ~/circleci-demo-workflows
+      - image: circleci/openjdk:8-jdk
+    working_directory: ~/blueorgreenfrontend
     steps:
       - checkout
-      - run: bundle install --path vendor/bundle
-      - run: bundle exec rake db:create db:schema:load
-      - run:
-          name: Run tests
-          command: rake
+      - run: cd blueorgreenfrontend && ./mvnw clean package
 
   "ruby-2.4":
     docker:
@@ -39,4 +34,5 @@ workflows:
   version: 2
   build:
     jobs:
-      - "ruby-2.2"
+      - "blueorgreenservice"
+      - "blueorgreenfrontend"
