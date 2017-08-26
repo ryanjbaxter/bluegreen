@@ -3,16 +3,11 @@ version: 2.0
 jobs:
   "ruby-2.2":
     docker:
-      - image: circleci/ruby:2.2-node
-      - image: circleci/postgres:9.4.12-alpine
-    working_directory: ~/circleci-demo-workflows
+      - image: circleci/openjdk:8-jdk
+    working_directory: ~/blueorgreenservice
     steps:
       - checkout
-      - run: bundle install --path vendor/bundle
-      - run: bundle exec rake db:create db:schema:load
-      - run:
-          name: Run tests
-          command: rake
+      - run: ./mvnw clean package
 
   "ruby-2.3":
     docker:
