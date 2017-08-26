@@ -7,7 +7,7 @@ jobs:
     working_directory: ~/blueorgreenservice
     steps:
       - checkout
-      - run: ./mvnw clean package
+      - run: cd blueorgreenservice && ./mvnw clean package
 
   "ruby-2.3":
     docker:
