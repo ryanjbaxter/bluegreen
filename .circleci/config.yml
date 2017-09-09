@@ -17,9 +17,16 @@ jobs:
       - checkout
       - run: cd blueorgreenfrontend && ./mvnw clean package
 
+  "blueorgreenservicedeploy":
+    docker:
+      - image: governmentpaas/cf-cli
+    steps:
+      - run: cf -v
+
 workflows:
   version: 2
   build:
     jobs:
       - "blueorgreenservice"
       - "blueorgreenfrontend"
+      - "blueorgreenservicedeploy"
