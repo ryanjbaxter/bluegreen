@@ -29,6 +29,6 @@ workflows:
     jobs:
       - "blueorgreenservice"
       - "blueorgreenfrontend"
-      - "blueorgreenservicedeploy"
-        requires:
-          - "blueorgreenservice"
+      - "blueorgreenservicedeploy":
+          requires:
+            - "blueorgreenservice"
