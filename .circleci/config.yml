@@ -22,7 +22,7 @@ jobs:
       - image: governmentpaas/cf-cli
     steps:
       - run: cf -v
-      - run: echo User $CF_USER_NAME
+      - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
 
 workflows:
   version: 2
