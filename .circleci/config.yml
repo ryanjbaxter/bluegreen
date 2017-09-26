@@ -8,6 +8,12 @@ jobs:
     steps:
       - checkout
       - run: cd blueorgreenservice && ./mvnw clean package
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory
+          root: target
+          # Must be relative path from root
+           paths:
+             - blueorgreen-0.0.1-SNAPSHOT.jar
 
   "blueorgreenfrontend":
     docker:
@@ -21,6 +27,9 @@ jobs:
     docker:
       - image: governmentpaas/cf-cli
     steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /tmp/workspace
       - run: cf -v
       - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
 
