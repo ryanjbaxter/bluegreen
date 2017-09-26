@@ -10,10 +10,11 @@ jobs:
       - run: cd blueorgreenservice && ./mvnw clean package
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory
-          root: blueorgreenservice/target
+          root: blueorgreenservice
           # Must be relative path from root
           paths:
-            - blueorgreen-0.0.1-SNAPSHOT.jar
+            - target/blueorgreen-0.0.1-SNAPSHOT.jar
+            - manifest.yml
 
   "blueorgreenfrontend":
     docker:
