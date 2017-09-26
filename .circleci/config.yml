@@ -1,3 +1,14 @@
+defaults: &cfdefaults
+  docker:
+    - image: governmentpaas/cf-cli
+  steps:
+    - attach_workspace:
+        # Must be absolute path or relative path from working_directory
+        at: /tmp/workspace
+    - run: cf -v
+    - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
+    - run: cd /tmp/workspace && cf push
+
 version: 2.0
 
 jobs:
@@ -25,15 +36,7 @@ jobs:
       - run: cd blueorgreenfrontend && ./mvnw clean package
 
   "blueorgreenservicedeploy":
-    docker:
-      - image: governmentpaas/cf-cli
-    steps:
-      - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace
-      - run: cf -v
-      - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
-      - run: cd /tmp/workspace && cf push
+    <<: *cfdefaults
 
 workflows:
   version: 2
