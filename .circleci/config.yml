@@ -34,9 +34,19 @@ jobs:
     steps:
       - checkout
       - run: cd blueorgreenfrontend && ./mvnw clean package
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory
+          root: blueorgreenfrontend
+          # Must be relative path from root
+          paths:
+            - target/blueorgreenfrontend-0.0.1-SNAPSHOT.jar
+            - manifest.yml
 
   "blueorgreenservicedeploy":
     <<: *cfdefaults
+
+  "blueorgreenfrontenddeploy":
+      <<: *cfdefaults
 
 workflows:
   version: 2
@@ -47,3 +57,6 @@ workflows:
       - "blueorgreenservicedeploy":
           requires:
             - "blueorgreenservice"
+      - "blueorgreenfrontenddeploy":
+          requires:
+            - "blueorgreenfrontend"
