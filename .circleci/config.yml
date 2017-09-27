@@ -44,9 +44,13 @@ jobs:
 
   "blueorgreenservicedeploy":
     <<: *cfdefaults
+    steps:
+      - run: cd /tmp/workspace && cf push blueservice
 
   "blueorgreenfrontenddeploy":
       <<: *cfdefaults
+      steps:
+        - run: cd /tmp/workspace && cf push
 
 workflows:
   version: 2
