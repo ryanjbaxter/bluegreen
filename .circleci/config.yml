@@ -7,7 +7,6 @@ defaults: &cfdefaults
         at: /tmp/workspace
     - run: cf -v
     - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
-    - run: cd /tmp/workspace && cf push
 
 version: 2.0
 
