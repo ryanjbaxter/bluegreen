@@ -42,7 +42,7 @@ jobs:
             - target/blueorgreenfrontend-0.0.1-SNAPSHOT.jar
             - manifest.yml
 
-  "blueorgreenservicedeploy":
+  "deployblueservice":
     <<: *cfdefaults
     steps:
       - attach_workspace:
@@ -52,7 +52,7 @@ jobs:
       - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
       - run: cd /tmp/workspace && cf push blueservice
 
-  "blueorgreenfrontenddeploy":
+  "deployfrontend":
       <<: *cfdefaults
       steps:
         - attach_workspace:
@@ -68,9 +68,9 @@ workflows:
     jobs:
       - "blueorgreenservice"
       - "blueorgreenfrontend"
-      - "blueorgreenservicedeploy":
+      - "deployblueservice":
           requires:
             - "blueorgreenservice"
-      - "blueorgreenfrontenddeploy":
+      - "deployfrontend":
           requires:
             - "blueorgreenfrontend"
