@@ -56,8 +56,8 @@ jobs:
       <<: *cfdefaults
       steps:
         - attach_workspace:
-          # Must be absolute path or relative path from working_directory
-          at: /tmp/workspace
+            # Must be absolute path or relative path from working_directory
+            at: /tmp/workspace
         - run: cf -v
         - run: cf login -a api.run.pivotal.io -o FrameworksAndRuntimes -s rbaxter -u $CF_USER_NAME -p $CF_PASSWORD
         - run: cd /tmp/workspace && cf push
