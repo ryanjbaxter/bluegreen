@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "color:blue")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"color:blue", "eureka.client.enabled: false"})
 public class BlueApplicationTests {
 
 	@Autowired
@@ -18,7 +18,7 @@ public class BlueApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		BlueOrGreenApplication.Color color = rest.getForObject("/", BlueOrGreenApplication.Color.class);
+		ColorController.Color color = rest.getForObject("/", ColorController.Color.class);
 		assertEquals("blue", color.getId());
 	}
 

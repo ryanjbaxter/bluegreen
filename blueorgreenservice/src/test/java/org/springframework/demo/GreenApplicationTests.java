@@ -13,14 +13,14 @@ import static org.junit.Assert.assertEquals;
  * @author Ryan Baxter
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "color:green")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = {"color:green", "eureka.client.enabled: false"})
 public class GreenApplicationTests {
 	@Autowired
 	private TestRestTemplate rest;
 
 	@Test
 	public void contextLoads() {
-		BlueOrGreenApplication.Color color = rest.getForObject("/", BlueOrGreenApplication.Color.class);
+		ColorController.Color color = rest.getForObject("/", ColorController.Color.class);
 		assertEquals("green", color.getId());
 	}
 }
